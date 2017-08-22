@@ -1,0 +1,86 @@
+set nocompatible
+set modifiable
+set number
+set relativenumber
+set laststatus=2
+set noshowmode
+set expandtab
+set tabstop=2
+set shiftwidth=2
+set cmdheight=1
+set cursorline
+set mouse=
+set colorcolumn=80
+set omnifunc=syntaxcomplete#Complete
+set completeopt=longest,menuone
+set incsearch
+colorscheme monokai
+
+" Vundle
+filetype off
+" Set up vundle
+let vundle_exist=0
+let vundle_readme=expand('~/.vim/bundle/Vundle.vim/README.md')
+if !filereadable(vundle_readme)
+  echo "Installing Vundle.."
+  echo ""
+  silent !mkdir -p ~/.vim/bundle
+  silent !git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+  let vundle_exist=1
+endif
+set rtp+=~/.vim/bundle/Vundle.vim/
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'flazz/vim-colorschemes'
+Plugin 'Raimondi/delimitMate'
+Plugin 'ervandew/supertab'
+Plugin 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdcommenter'
+call vundle#end()
+if vundle_exist == 1
+  echo "Installing Bundles, please ignore key map error messages"
+  echo ""
+  :PluginInstall
+endif
+
+filetype plugin indent on
+set omnifunc=syntaxcomplete#Complete
+syntax enable
+
+" airline
+let g:airline_powerline_fonts = 1
+let g:airline_theme='murmur'
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#fnamemod = ':t'
+
+let delimitMate_expand_cr = 1
+
+let g:SuperTabDefaultCompletionType = "context"
+
+" ctrl-p config
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ 'link': 'some_bad_symbolic_links',
+  \ }
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
+set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
+
+"Custom functions
+"Toggle Number
+function! NumberToggle()
+  if(&relativenumber == 1)
+    set relativenumber!
+  else
+    set relativenumber
+  endif
+endfunc
+map <C-b> :call NumberToggle()<cr>
+map <C-n> :NERDTreeToggle<CR>
