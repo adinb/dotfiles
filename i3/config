@@ -179,8 +179,6 @@ bindsym Mod1+r mode "resize"
 # finds out, if available)
 bar {
         status_command i3status 
-        # status_command ~/.i3/cmus_title.sh
-        # tray_output primary
     colors {
         background #1c1c1c
         focused_workspace  #83FF08 #1c1c1c #ffffff

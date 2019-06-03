@@ -1,86 +1,165 @@
-set nocompatible
-set modifiable
-set number
+"vim-plug"
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin(expand('~/.vim/plugged'))
+
+if isdirectory('/usr/local/opt/fzf')
+  Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
+else
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+  Plug 'junegunn/fzf.vim'
+endif
+Plug 'Shougo/vimproc.vim', {'do': 'make'}
+Plug 'scrooloose/nerdtree'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+Plug 'vim-scripts/grep.vim'
+Plug 'Raimondi/delimitMate'
+Plug 'majutsushi/tagbar'
+Plug 'pangloss/vim-javascript'
+Plug 'Valloric/YouCompleteMe'
+Plug 'tpope/vim-surround'
+Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
+Plug 'w0rp/ale'
+Plug 'davidhalter/jedi-vim'
+Plug 'Yggdroot/indentLine'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'srcery-colors/srcery-vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
+call plug#end()
+
+" Relative line number display
 set relativenumber
-set laststatus=2
+
 set noshowmode
-set expandtab
-set tabstop=2
-set shiftwidth=2
-set cmdheight=1
+
+" Cursor visual indicator
 set cursorline
-set mouse=
 set colorcolumn=80
-set omnifunc=syntaxcomplete#Complete
-set completeopt=longest,menuone
+
+" Show line and column number
+set ruler
+
+" Colors. If you're using terminal for vim, refer to
+" https://github.com/srcery-colors/srcery-vim for colorscheme
+syntax on
+colorscheme srcery
+
+"" Fix backspace indent
+set backspace=indent,eol,start
+
+"" Tabs. May be overridden by autocmd rules
+set tabstop=4
+set softtabstop=0
+set shiftwidth=4
+set expandtab
+
+"" Map leader to ,
+let mapleader=','
+
+"" Searching
+set hlsearch
 set incsearch
-colorscheme monokai
+set ignorecase
+set smartcase
 
-" Vundle
-filetype off
-" Set up vundle
-let vundle_exist=0
-let vundle_readme=expand('~/.vim/bundle/Vundle.vim/README.md')
-if !filereadable(vundle_readme)
-  echo "Installing Vundle.."
-  echo ""
-  silent !mkdir -p ~/.vim/bundle
-  silent !git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-  let vundle_exist=1
-endif
-set rtp+=~/.vim/bundle/Vundle.vim/
-call vundle#begin()
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'flazz/vim-colorschemes'
-Plugin 'Raimondi/delimitMate'
-Plugin 'ervandew/supertab'
-Plugin 'bling/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'scrooloose/nerdtree'
-Plugin 'scrooloose/nerdcommenter'
-call vundle#end()
-if vundle_exist == 1
-  echo "Installing Bundles, please ignore key map error messages"
-  echo ""
-  :PluginInstall
-endif
+"" Directories for swp files
+set nobackup
+set noswapfile
+set fileformats=unix,dos,mac
 
-filetype plugin indent on
-set omnifunc=syntaxcomplete#Complete
-syntax enable
 
-" airline
-let g:airline_powerline_fonts = 1
-let g:airline_theme='murmur'
+" vim-airline
+let g:airline_theme = 'minimalist'
+let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#fnamemod = ':t'
+let g:airline#extensions#tagbar#enabled = 1
+let g:airline_skip_empty_sections = 1
 
-let delimitMate_expand_cr = 1
+" So we can insert the command faster
+cnoreabbrev W! w!
+cnoreabbrev Q! q!
+cnoreabbrev Qall! qall!
+cnoreabbrev Wq wq
+cnoreabbrev Wa wa
+cnoreabbrev wQ wq
+cnoreabbrev WQ wq
+cnoreabbrev W w
+cnoreabbrev Q q
+cnoreabbrev Qall qall
 
-let g:SuperTabDefaultCompletionType = "context"
+" NERDTree options
+let g:NERDTreeChDirMode=2
+let g:NERDTreeIgnore=['\.rbc$', '\~$', '\.pyc$', '\.db$', '\.sqlite$', '__pycache__']
+let g:NERDTreeSortOrder=['^__\.py$', '\/$', '*', '\.swp$', '\.bak$', '\~$']
+let g:NERDTreeShowBookmarks=1
+let g:NERDTreeMapOpenInTabSilent = '<RightMouse>'
+let g:NERDTreeWinSize = 40
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
+nnoremap <silent> <F2> :NERDTreeFind<CR>
+nnoremap <silent> <C-n> :NERDTreeToggle<CR>
 
-" ctrl-p config
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_working_path_mode = 'ra'
-let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-  \ 'file': '\v\.(exe|so|dll)$',
-  \ 'link': 'some_bad_symbolic_links',
-  \ }
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
-set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
+" grep.vim
+nnoremap <silent> <leader>f :Rgrep<CR>
+let Grep_Default_Options = '-IR'
+let Grep_Skip_Files = '*.log *.db'
+let Grep_Skip_Dirs = '.git node_modules'
 
-"Custom functions
-"Toggle Number
-function! NumberToggle()
-  if(&relativenumber == 1)
-    set relativenumber!
-  else
-    set relativenumber
-  endif
-endfunc
-map <C-b> :call NumberToggle()<cr>
-map <C-n> :NERDTreeToggle<CR>
+"" Split
+noremap <Leader>h :<C-u>split<CR>
+noremap <Leader>v :<C-u>vsplit<CR>
+
+"" Git
+noremap <Leader>ga :Gwrite<CR>
+noremap <Leader>gc :Gcommit<CR>
+noremap <Leader>gsh :Gpush<CR>
+noremap <Leader>gll :Gpull<CR>
+noremap <Leader>gs :Gstatus<CR>
+noremap <Leader>gb :Gblame<CR>
+noremap <Leader>gd :Gvdiff<CR>
+noremap <Leader>gr :Gremove<CR>
+
+noremap gj :YcmCompleter GoTo<CR>
+noremap <Leader>c :Commentary<CR>
+
+" Tagbar
+nmap <silent> <C-j> :TagbarToggle<CR>
+let g:tagbar_autofocus = 1
+
+" vim-airline
+let g:airline#extensions#virtualenv#enabled = 1
+
+" vim-airline
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+
+" powerline symbols
+let g:airline#extensions#tabline#left_sep = ''
+let g:airline#extensions#tabline#left_alt_sep = ''
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = ''
+
+" Remaps
+noremap <C-p> :FZF<CR>
+noremap <Leader>n :ALEPrevious<CR>
+noremap <Leader>m :ALENext<CR>
+noremap <Leader>. :noh<CR>
+
+" Ale linter
+let g:ale_linters = {'javascript': ['eslint']}
+let g:ale_linters = {'go': ['golint']}
+
+let g:jedi#use_splits_not_buffers = "right"
