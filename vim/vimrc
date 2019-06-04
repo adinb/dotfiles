@@ -37,6 +37,7 @@ call plug#end()
 
 " Relative line number display
 set relativenumber
+set number
 
 set noshowmode
 
@@ -162,4 +163,8 @@ noremap <Leader>. :noh<CR>
 let g:ale_linters = {'javascript': ['eslint']}
 let g:ale_linters = {'go': ['golint']}
 
-let g:jedi#use_splits_not_buffers = "right"
+" Disable YCM diagnostics because we're using ALE
+let g:ycm_show_diagnostics_ui = 0
+
+" Always use local .ycm_extra_conf
+let g:ycm_confirm_extra_conf = 0
