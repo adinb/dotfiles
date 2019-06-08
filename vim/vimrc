@@ -27,11 +27,11 @@ Plug 'tpope/vim-surround'
 Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
 Plug 'w0rp/ale'
 Plug 'davidhalter/jedi-vim'
-Plug 'Yggdroot/indentLine'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'srcery-colors/srcery-vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'leafgarland/typescript-vim'
 
 call plug#end()
 
