@@ -161,4 +161,3 @@ let g:LanguageClient_serverCommands = {'c': ['clangd'], 'go': ['gopls']}
 " vim-terraform configuration
 " Requires terraform to be installed
 let g:terraform_fmt_on_save=1
-let g:terraform_fold_sections=1 " Enable folding by default
