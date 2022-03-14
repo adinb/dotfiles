@@ -145,6 +145,8 @@ let g:ale_linters = {'go': ['golint']}
 let g:ycm_show_diagnostics_ui = 0
 " Always use local .ycm_extra_conf
 let g:ycm_confirm_extra_conf = 0
+let g:ycm_key_list_select_completion=[]
+let g:ycm_key_list_previous_completion=[]
 
 " VimTeX
 let g:vimtex_view_general_viewer = 'okular'
